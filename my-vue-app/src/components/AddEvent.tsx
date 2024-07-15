@@ -1,20 +1,14 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-
-type Event = {
-  type: string;
-  description: string;
-  date: string | null;
-  time: string;
-};
+import { CalendarEvent } from "../types";
 
 type AddEventProps = {
   dayClicked: string | null;
-  setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+  setEvents: React.Dispatch<React.SetStateAction<CalendarEvent[]>>;
   onClose: () => void;
 };
 
 const AddEvent: React.FC<AddEventProps> = (props) => {
-  const [event, setEvent] = useState<Event>({
+  const [event, setEvent] = useState<CalendarEvent>({
     type: "startPer",
     description: "",
     date: props.dayClicked,
@@ -24,48 +18,43 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
     props.setEvents((prevState) => {
-      console.log("rwrwr", event);
+      console.log("event", event);
       return [...prevState, event];
     });
     props.onClose();
   };
 
-  const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEvent({ ...event, description: e.target.value });
-  };
-
-  const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setEvent({ ...event, type: e.target.value });
-  };
-
-  const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEvent({ ...event, time: e.target.value });
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    attribute: string
+  ) => {
+    setEvent({ ...event, [attribute]: e.target.value });
   };
 
   return (
-    <div className="addEventModal">
-      <h2>Add Event</h2>
-      <form id="eventForm">
+    <div className="flex flex-col gap-4 text-center border-none">
+      <h2 className="text-2xl ">Add Event</h2>
+      <form
+        id="eventForm"
+        className="flex gap-5 flex-col border-none focus:border-none"
+      >
         <input
           id="eventTitleInput"
+          className="h-10 p-2 outline-none"
           placeholder="Description"
-          required
-          onChange={handleDescriptionChange}
+          onChange={(e) => handleChange(e, "description")}
         />
-        <div
-          style={{
-            justifyContent: "space-between",
-            display: "flex",
-            gap: "5px",
-            paddingBottom: "15px",
-          }}
-        >
-          <label htmlFor="event">Choose event:</label>
+        <div className="flex gap-3 text-center items-center">
+          <label htmlFor="event" className="flex text-center">
+            Choose event:
+          </label>
           <select
             id="event"
+            className="h-10 p-2"
+
             name="event"
             style={{ padding: "5px", outline: "none" }}
-            onChange={handleTypeChange}
+            onChange={(e) => handleChange(e, "type")}
           >
             <option value="startPer">Period Start</option>
             <option value="endPer">Period End</option>
@@ -73,25 +62,26 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
             <option value="event">Event</option>
           </select>
           <input
+            className="h-10 p-2  outline-none"
             type="time"
             id="time"
             name="time"
-            onChange={handleTimeChange}
+            onChange={(e) => handleChange(e, "time")}
           />
         </div>
       </form>
-      <div
-        style={{
-          justifyContent: "space-between",
-          display: "flex",
-          paddingLeft: "30px",
-          paddingRight: "30px",
-        }}
-      >
-        <button id="cancelButton" onClick={props.onClose}>
+      <div className="flex justify-between px-8 pt-5">
+        <button
+          className="bg-red p-3 rounded-md text-white text-lg"
+          onClick={props.onClose}
+        >
           Cancel
         </button>
-        <button onClick={submitHandler} id="saveButton">
+        <button
+          className="bg-green p-3 rounded-md text-white text-lg"
+          onClick={submitHandler}
+          id="saveButton"
+        >
           Save
         </button>
       </div>

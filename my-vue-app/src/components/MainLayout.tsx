@@ -6,7 +6,8 @@ type MainLayoutProps = {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <div className="bg-custom-bg bg-cover w-screen h-screen overflow-x-hidden justify-center flex align-middle text-center items-center">
+    <div className="bg-custom-bg
+     w-full h-full bg-cover">
       {children}
     </div>
   );

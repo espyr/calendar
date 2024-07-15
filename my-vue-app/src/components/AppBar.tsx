@@ -1,6 +1,6 @@
 const AppBar = () => {
   return (
-    <nav className="bg-sugar p-3">
+    <nav className="bg-sugar p-3 w-full">
       <div className="grid grid-cols-3 text-center">
         <div className="flex-1"></div>
         <h2 className="font-bold flex-1  text-rose text-4xl font-playwrite">

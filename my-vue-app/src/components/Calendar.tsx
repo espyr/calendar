@@ -1,33 +1,27 @@
 import React, { useEffect, useState } from "react";
-// import Modal from "./UI/Modals/Modal";
-// import AddEvent from "./UI/Modals/AddEvent";
-// import DeleteEvent from "./UI/Modals/DeleteEvent";
 import Day from "./Day";
 import "../App.css";
 import { months, weekdays } from "./staticData";
-// import { fetchEvents } from "./util/http";
-import Header from "./Header"; // Assuming you have a Header component
+import Header from "./Header";
 import Modal from "./Modal";
 import AddEvent from "./AddEvent";
+import DeleteEvent from "./DeleteEvent";
+import { CalendarDay, CalendarEvent } from "../types";
 
-type CalendarProps = {};
-
-const Calendar: React.FC<CalendarProps> = () => {
-  const [monthStep, setMonthStep] = useState<number>(0); // Specify number type for monthStep
-  const [dayClicked, setDayClicked] = useState<string | null>(null); // Specify string | null for dayClicked
-  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false); // Specify boolean type for modals
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false); // Specify boolean type for modals
-  const [shownMonth, setShownMonth] = useState<number>(new Date().getMonth()); // Specify number type for month
-  const [shownYear, setShownYear] = useState<number>(new Date().getFullYear()); // Specify number type for year
+const Calendar: React.FC = () => {
+  const [monthStep, setMonthStep] = useState<number>(0);
+  const [dayClicked, setDayClicked] = useState<string | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [shownMonth, setShownMonth] = useState<number>(new Date().getMonth());
+  const [shownYear, setShownYear] = useState<number>(new Date().getFullYear());
   const newDay = new Date();
-  const today = `${newDay.getDate()} ${months[newDay.getMonth()]} ${newDay.getFullYear()}`;
-  const [currentDate, setCurrentDate] = useState<string>(""); // Specify string type for currentDate
-  const [calendarContent, setCalendarContent] = useState<any[]>([]); // Specify type for calendarContent
-  // const { data, isPending, isError, error, refetch } = useQuery<any>({ // Specify type for useQuery
-  //   queryKey: ["events"],
-  //   queryFn: fetchEvents,
-  // });
-  const [events, setEvents] = useState<any>([]); // Specify type for events
+  const today = `${newDay.getDate()} ${
+    months[newDay.getMonth()]
+  } ${newDay.getFullYear()}`;
+  const [currentDate, setCurrentDate] = useState<string>("");
+  const [calendarContent, setCalendarContent] = useState<CalendarDay[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
 
   useEffect(() => {
     console.log(events);
@@ -35,29 +29,31 @@ const Calendar: React.FC<CalendarProps> = () => {
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
       const newMonth = currentMonth + monthStep;
-      const yearOffset = Math.floor(newMonth / 12); // Number of years to add/subtract
-      setShownMonth(newMonth % 12); // Set the month within the current year
+      const yearOffset = Math.floor(newMonth / 12);
+      setShownMonth(newMonth % 12);
       setShownYear(currentYear + yearOffset);
     }
 
-    // Update currentMonth and currentYear
     setCurrentDate(` ${months[shownMonth]} ${shownYear}`);
     loadCalendar();
-  }, [monthStep, shownMonth, shownYear, events]); // Include dependencies in useEffect
+  }, [monthStep, shownMonth, shownYear, events]);
 
   const loadCalendar = () => {
     setCalendarContent([]);
     const daysInMonth = new Date(shownYear, shownMonth + 1, 0).getDate();
-    const firstDayOfMonth = new Date(shownYear, shownMonth, 1).toLocaleDateString("en-GB", {
+    const firstDayOfMonth = new Date(
+      shownYear,
+      shownMonth,
+      1
+    ).toLocaleDateString("en-GB", {
       weekday: "long",
       year: "numeric",
       month: "numeric",
       day: "numeric",
     });
-    // Calculate the starting day of the month (0 for Sunday, 1 for Monday, etc.)
     const paddingDays = weekdays.indexOf(firstDayOfMonth.split(", ")[0]);
     const calendarDays = [];
-
+console.log(events,'evemlssd')
     for (let i = 1; i <= paddingDays + daysInMonth; i++) {
       const date = `${shownYear}-${shownMonth + 1}-${i - paddingDays}`;
       const daySquare = {
@@ -66,7 +62,7 @@ const Calendar: React.FC<CalendarProps> = () => {
         className: i <= paddingDays ? "paddingDay" : "day",
         onClick: () => i > paddingDays && openModal(date),
         text: i - paddingDays,
-        events: [],
+        events: events.filter((event)=>event.date===date),
       };
 
       calendarDays.push(daySquare);
@@ -88,27 +84,36 @@ const Calendar: React.FC<CalendarProps> = () => {
 
   return (
     <>
-      <div id="today">
-        <p> {today}</p>
+      <div className="flex justify-end self-end mr-5 mt-5" >
+        <p className=" text-brown-peach  w-52 self-end font-cursive	text-center border-4 border-coral outset-border p-2 bg-white font-bold text-lg
+
+"> {today}</p>
       </div>
-      <div id="container">
+      <div>
         <Header currentDate={currentDate} setMonthStep={setMonthStep} />
         {calendarContent && (
-          <div className="grid grid-cols-7 gap-1 laptop:mx-24 desktop:mx-52 ">
-            {calendarContent.map((item) => (
+          <div className="grid grid-cols-7 gap-1 laptop:mx-24 desktop:mx-52">
+            {calendarContent.map((item: CalendarDay) => (
               <Day key={item.key} item={item} />
             ))}
           </div>
         )}
         {isAddModalOpen && (
           <Modal onHideModal={() => setIsAddModalOpen(false)}>
-            <AddEvent setEvents={setEvents} onClose={() => setIsAddModalOpen(false)} dayClicked={dayClicked} />
+            <AddEvent
+              setEvents={setEvents}
+              onClose={() => setIsAddModalOpen(false)}
+              dayClicked={dayClicked}
+            />
           </Modal>
         )}
 
         {isDeleteModalOpen && (
           <Modal onHideModal={() => setIsDeleteModalOpen(false)}>
-            {/* <DeleteEvent setEvents={setEvents} onClose={() => setIsDeleteModalOpen(false)} /> */}
+            <DeleteEvent
+              setEvents={setEvents}
+              onClose={() => setIsDeleteModalOpen(false)}
+            />
           </Modal>
         )}
       </div>
