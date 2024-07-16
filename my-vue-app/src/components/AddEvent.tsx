@@ -59,7 +59,13 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
             <option value="startPer">Period Start</option>
             <option value="endPer">Period End</option>
             <option value="incident">Incident</option>
-            <option value="event">Event</option>
+            <option value="medicalAppointment">Medical Appointment</option>
+            <option value="gym">Gym</option>
+            <option value="drink">Drink</option>
+            <option value="coffee">Coffee</option>
+            <option value="work">Work</option>
+            <option value="coding">Coding</option>
+
           </select>
           <input
             className="h-10 p-2  outline-none"
