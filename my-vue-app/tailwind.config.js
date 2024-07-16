@@ -5,7 +5,7 @@ export default {
     extend: {
       screens: {
         tablet: "640px",
-        laptop: "800px",
+        laptop: "1000px",
         desktop: "1280px",
       },
       fontFamily: {

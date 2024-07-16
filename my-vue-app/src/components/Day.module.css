@@ -12,8 +12,8 @@
     justify-content: space-between;
   }
   .day {
-    width: 200px;
     padding: 10px;
+    display: flex;
     height: 150px;
     cursor: pointer;
     box-sizing: border-box;
@@ -32,7 +32,7 @@
   
   /* Add ellipsis to overflowed text */
   .today {
-    background-color:#fcbaec;
+    background-color:#ffeffb;
     border: 1px solid white;
     color:brown
   }

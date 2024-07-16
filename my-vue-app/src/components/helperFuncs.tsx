@@ -7,55 +7,58 @@ import work from "../assets/work.png";
 import coffee from "../assets/coffee.png";
 import drink from "../assets/drink.png";
 import incident from "../assets/incident.png";
-import event from "../assets/event.png";
+import eventIcon from "../assets/event.png";
+import { CalendarEvent } from "../types";
 
-export const getIcon = (type: string) => {
-    switch (type) {
+export const getIcon = (event: CalendarEvent) => {
+    console.log(event,'event')
+    switch (event.type) {
       case "startPer":
         return (
-          <div className="w-full bg-red bg-opacity-50">
-            {" "}
-            <img className="w-5 h-5" src={perSt}></img>{" "}
-          </div>
+          <button className="w-full bg-red bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={perSt}></img>{event?.time}{'  '}{event?.description}
+      </button>
         );
       case "endPer":
         return (
-          <div className="w-full bg-red bg-opacity-50">
-            <img className="w-5 h-5" src={perEnd}></img>{" "}
-          </div>
+
+          <button className="w-full bg-red bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={perEnd}></img>{event?.time}{'  '}{event?.description}
+      </button>
+
         );
       case "incident":
-        return<div className="w-full bg-yellow bg-opacity-50">
-        <img className="w-5 h-5" src={incident}></img>{" "}
-      </div>
+        return <button className="w-full bg-yellow bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={incident}></img>{event?.time}{'  '}{event?.description}
+      </button>
       case "event":
-        return<div className="w-full bg-ciel bg-opacity-50">
-        <img className="w-5 h-5" src={event}></img>{" "}
-      </div>
+        return<button className="w-full bg-ciel bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={eventIcon}></img>{event?.time}{'  '}{event?.description}
+      </button>
       case "medicalAppointment":
-        return <div className="w-full bg-violet-950 bg-opacity-50">
-        <img className="w-5 h-5" src={medical}></img>{" "}
-      </div>
+        return <button className="w-full bg-violet-950 bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={medical}></img>{event?.time}{'  '}{event?.description}
+      </button> 
       case "gym":
-        return <div className="w-full bg-light-purple bg-opacity-50">
-        <img className="w-5 h-5" src={gym}></img>{" "}
-      </div>
+        return <button className="w-full bg-light-purple bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={gym}></img>{event?.time}{'  '}{event?.description}
+      </button>
       case "drink":
-        return <div className="w-full bg-teal-500 bg-opacity-50">
-        <img className="w-5 h-5" src={drink}></img>{" "}
-      </div>
+        return <button className="w-full bg-teal-500 bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={drink}></img>{event?.time}{'  '}{event?.description}
+      </button>
       case "coffee":
-        return <div className="w-full bg-orange bg-opacity-50">
-        <img className="w-5 h-5" src={coffee}></img>{" "}
-      </div>
+        return <button className="w-full bg-orange bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={coffee}></img>{event?.time}{'  '}{event?.description}
+      </button>
       case "work":
-        return<div className="w-full bg-lime-300 bg-opacity-50">
-        <img className="w-5 h-5" src={work}></img>{" "}
-      </div>
+        return <button className="w-full bg-lime-300 bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={work}></img>{event?.time}{'  '}{event?.description}
+      </button>
       case "coding":
-        return <div className="w-full bg-light-brown bg-opacity-50">
-        <img className="w-5 h-5" src={coding}></img>{" "}
-      </div>
+        return <button className="w-full bg-light-brown bg-opacity-50 flex gap-2" >
+        <img className="w-5 h-5" src={coding}></img>{event?.time}{'  '}{event?.description}
+      </button>
       default:
         return null;
     }

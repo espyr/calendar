@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps>  = ({currentDate, setMonthStep}) => {
             onClick={() => setMonthStep((prevState) => prevState + 1)}
           />
         </div>
-      <div className="grid grid-cols-7 gap-1 laptop:mx-24 desktop:mx-52 text-center font-medium text-3xl text-rose">
+      <div className="grid grid-cols-7 gap-1 laptop:mx-24 desktop:mx-10 text-center font-medium text-3xl text-rose">
       {weekdays.map((day) => (
           <div key={day}>{day}</div>
         ))}

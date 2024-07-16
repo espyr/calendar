@@ -5,14 +5,15 @@ import { months, weekdays } from "./staticData";
 import Header from "./Header";
 import Modal from "./Modal";
 import AddEvent from "./AddEvent";
-import DeleteEvent from "./DeleteEvent";
 import { CalendarDay, CalendarEvent } from "../types";
+import { v4 as uuidv4 } from 'uuid';
 
 const Calendar: React.FC = () => {
   const [monthStep, setMonthStep] = useState<number>(0);
-  const [dayClicked, setDayClicked] = useState<string | null>(null);
+  const [dayClicked, setDayClicked] = useState<string>();
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [eventClicked, setEventClicked] = useState<CalendarEvent>();
   const [shownMonth, setShownMonth] = useState<number>(new Date().getMonth());
   const [shownYear, setShownYear] = useState<number>(new Date().getFullYear());
   const newDay = new Date();
@@ -53,11 +54,10 @@ const Calendar: React.FC = () => {
     });
     const paddingDays = weekdays.indexOf(firstDayOfMonth.split(", ")[0]);
     const calendarDays = [];
-console.log(events,'evemlssd')
     for (let i = 1; i <= paddingDays + daysInMonth; i++) {
       const date = `${shownYear}-${shownMonth + 1}-${i - paddingDays}`;
       const daySquare = {
-        key: i,
+        id: uuidv4(),
         isToday: isToday(date),
         className: i <= paddingDays ? "paddingDay" : "day",
         onClick: () => i > paddingDays && openModal(date),
@@ -85,34 +85,38 @@ console.log(events,'evemlssd')
   return (
     <>
       <div className="flex justify-end self-end mr-5 mt-5" >
-        <p className=" text-brown-peach  w-52 self-end font-cursive	text-center border-4 border-coral outset-border p-2 bg-white font-bold text-lg
+        <p className=" text-brown-peach  w-52 self-end font-cursive	text-center border-4
+         border-coral outset-border p-2 bg-white font-bold text-lg
 
 "> {today}</p>
       </div>
       <div>
         <Header currentDate={currentDate} setMonthStep={setMonthStep} />
         {calendarContent && (
-          <div className="grid grid-cols-7 gap-1 laptop:mx-24 desktop:mx-52">
+          <div className="grid grid-cols-7 gap-1 laptop:mx-2 tablet:mx-2 desktop:mx-10">
             {calendarContent.map((item: CalendarDay) => (
-              <Day key={item.key} item={item} />
+              <Day key={item.id} item={item} setEventClicked={setEventClicked} setIsEditModalOpen={setIsEditModalOpen}/>
             ))}
           </div>
         )}
-        {isAddModalOpen && (
+        {isAddModalOpen && dayClicked && (
           <Modal onHideModal={() => setIsAddModalOpen(false)}>
             <AddEvent
               setEvents={setEvents}
               onClose={() => setIsAddModalOpen(false)}
-              dayClicked={dayClicked}
+              data={dayClicked}
+              mode={'add'}
+
             />
           </Modal>
         )}
-
-        {isDeleteModalOpen && (
-          <Modal onHideModal={() => setIsDeleteModalOpen(false)}>
-            <DeleteEvent
+{isEditModalOpen && eventClicked &&(
+          <Modal onHideModal={() => setIsAddModalOpen(false)}>
+            <AddEvent
               setEvents={setEvents}
-              onClose={() => setIsDeleteModalOpen(false)}
+              onClose={() => setIsEditModalOpen(false)}
+              data={eventClicked}
+              mode={'edit'}
             />
           </Modal>
         )}

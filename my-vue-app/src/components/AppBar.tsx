@@ -23,6 +23,11 @@ const AppBar = () => {
               My Todo List
             </a>
           </li>
+          <li>
+            <a href="#" className="block py-2 px-3 text-purple text-xl hover:underline">
+              My Statistics
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
